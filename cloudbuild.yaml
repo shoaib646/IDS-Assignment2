@@ -1,10 +1,23 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build',
-      '-t', 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}',
-      '-f', 'Dockerfile',  # Explicitly reference the Dockerfile
-      '.'
-    ]
+    args:
+      - build
+      - '-t'
+      - 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}'
+      - '.'
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        gcloud run deploy server \
+          --image us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA} \
+          --platform managed \
+          --region us-central1 \
+          --port 3000 \
+          --allow-unauthenticated
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Critical assignment requirement[2][5]
+  logging: GCS_ONLY  # Alternative valid option[8]
