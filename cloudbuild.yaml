@@ -3,9 +3,9 @@ steps:
     args:
       - build
       - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/shoaib-100940517/server:${COMMIT_SHA}'
+      - 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}'
       - '.'
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/shoaib-100940517/server:${COMMIT_SHA}']
+    args: ['push', 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}']
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
