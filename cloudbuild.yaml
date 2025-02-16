@@ -1,26 +1,3 @@
-# steps:
-#   - name: 'gcr.io/cloud-builders/docker'
-#     args:
-#       - build
-#       - '-t'
-#       - 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}'
-#       - '.'
-#   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['push', 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}']
-#   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#     entrypoint: bash
-#     args:
-#       - '-c'
-#       - |
-#         gcloud run deploy server \
-#           --image us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA} \
-#           --platform managed \
-#           --region us-central1 \
-#           --port 3000 \
-#           --allow-unauthenticated
-# options:
-#   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Critical assignment requirement[2][5]
-#   logging: GCS_ONLY  # Alternative valid option[8]
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -30,11 +7,10 @@ steps:
       - 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}'
       - '.'
 
-  # Step 2: Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/devops-451104/shoaib-100940517/server:${COMMIT_SHA}']
 
-  # Step 3: Deploy the Docker image to Cloud Run
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud  # Use 'gcloud' directly instead of 'bash -c'
     args:
@@ -52,5 +28,5 @@ steps:
       - '--allow-unauthenticated'
 
 options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Required for the assignment
-  logging: GCS_ONLY  # Ensures logs are stored in Google Cloud Storage
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  
+  logging: GCS_ONLY 
